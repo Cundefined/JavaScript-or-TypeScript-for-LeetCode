@@ -12,10 +12,10 @@
 
 ```javascript
 .
-└── 155.Min Stack2                   												 #LeetCode第150题 
+└── 155.Min Stack2   #LeetCode第150题 
         ├── JavaScript / TypeScript for LeetCode (五十九).md   #存放此题博客文档
-        ├── 155.Min Stack2.js  	 															#存放此题JavaScript Solution
-        └── 155.Min Stack2.ts 	 														 #存放此题TypeScript Solution
+        ├── 155.Min Stack2.js   #存放此题JavaScript Solution
+        └── 155.Min Stack2.ts   #存放此题TypeScript Solution
 ```
 
 
