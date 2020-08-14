@@ -8,27 +8,25 @@
 
 ## 文件结构：
 
-​	以150.Evaluate Reverse Polish Notation为例：
+​	以155.Min Stack2为例：
 
 ```javascript
 .
-└── 150.Evaluate Reverse Polish Notation                    #LeetCode第150题 
-        ├── JavaScript / TypeScript for LeetCode (六十).md   #存放此题博客文档
-        ├── 49.Group Anagrams.js  	 #存放此题JavaScript Solution
-        └── 49.Group Anagrams.ts 	  #存放此题TypeScript Solution
+└── 155.Min Stack2                   												 #LeetCode第150题 
+        ├── JavaScript / TypeScript for LeetCode (五十九).md   #存放此题博客文档
+        ├── 155.Min Stack2.js  	 															#存放此题JavaScript Solution
+        └── 155.Min Stack2.ts 	 														 #存放此题TypeScript Solution
 ```
 
 
 
-#### 其中，“每日一题 -- LeetCode (七).md”具体内容如下所示：
+#### 其中，“JavaScript / TypeScript for LeetCode (五十九).md”具体内容如下所示：
 
-***亦可前往博客地址：https://blog.csdn.net/weixin_47771057***
+***亦可前往博客地址：https://blog.csdn.net/weixin_47771057/article/details/107977473***
 
 ------
 
-
-
-# JavaScript / TypeScript for LeetCode 
+# 是差点运气，可我一直在努力！
 
 **当前进程：**
 
@@ -37,164 +35,311 @@
 
 ***GitHub仓库：https://github.com/Cundefined/JavaScript-or-TypeScript-for-LeetCode***
 
-***参考视频：https://www.bilibili.com/video/BV1wA411b7qZ***
+
 
 ## 1、题目要求
 
-**( LeetCode-第49题 )  字母异位词分组**
-       给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+**( LeetCode-第155题 )  最小栈**
+       设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+
+	push(x) —— 将元素 x 推入栈中。
+	pop() —— 删除栈顶的元素。
+	top() —— 获取栈顶元素。
+	getMin() —— 检索栈中的最小元素。
 
 
-​	  **示例:**
 
-```javascript
-输入: ["eat", "tea", "tan", "ate", "nat", "bat"]
-输出:
-[
-  ["ate","eat","tea"],
-  ["nat","tan"],
-  ["bat"]
-]
+
+ **示例 :**
+
+```java
+输入：
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+输出：
+[null,null,null,null,-3,null,0,-2]
+
+解释：
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.getMin();   --> 返回 -2.
 ```
 
-说明：
+**提示：**
 
- - 所有输入均为小写字母。 
- - 不考虑答案输出的顺序。
+	pop、top 和 getMin 操作总是在 非空栈 上调用。
 
- 来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/group-anagrams
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/min-stack
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 ## 2、解题思路
 
-解题思路：统计每个字母的出现频率
+**方法一：基于数组的最小栈**
 
- 1. 检查输入字符串数组是否为空，为空的话，直接return空数组
+```javascript
+1、在构造函数中，初始化成员变量，两个数组，分别用于构造最小栈和辅助栈
+2、push方法：
+  2.1、元素入栈
+  2.2、如果辅助栈为空或者当前元素小于等于辅助栈的栈顶元素，就把当前元素也加入到辅助栈
+3、pop方法：
+  3.1、元素出栈，并保存供后续判断使用
+  3.2、如果辅助栈的栈顶元素等于出栈的元素，说明删除了最小元素，此时也要删除辅助栈顶元素
+4、top方法：
+  4.1、返回最小栈栈顶元素
+5、getMin方法：
+  5.1、返回辅助栈栈顶元素
+```
 
- 2. 创建一个hashMap,用来分类保存anagrams,其中键为“每个单词产生的词频统计数组”，值为“具有相同词频统计数组的单词构成的数组”
+**方法二：基于对象数组的最小栈【不用创建辅助栈了】**
 
- 3. 遍历输入的字符串数组：
-
-    3.1、对于每一个字符串单词，需要初始化一个长度为26的全0数组，用于统计26个字母出现的次数
-
-    3.2、遍历每个单词中的每个字母：
-
-    	 3.2.1、获取每个字母的ASCII码（a是97，所以要减去97，这样26个字母就可以对于词频统计数组的0~25的索引）
-    	 3.2.2、每出现一次，对应词频加1
-
-     3.3、遍历完当前单词后，把对应生成的词频数组利用join()转成字符串，这样才能作为hashMap的键
-
-    3.4、把当前单词分类保存到hashMap中：
-
-    	 3.4.1、如果map中有当前key的话，就把当前单词加入到其值中，同时拼接上之前已经放进来的单词，构成一个数组
-    	 3.4.2、如果没有的话，就只把当前这个单词放进去就行，不用拼接了
-
- 4.创建空数组，把map的所有值遍历提取出来，保存在这个数组中，返回这个结果数组
+```javascript
+1、在构造函数中，初始化成员变量，一个对象数组，用于构造最小栈,对象中保存当前元素和当前最小值
+2、push方法：
+  2.1、元素入栈，如果栈为空，直接把对象入栈，不为空则需要比较对象中的min属性后，再加入对象
+3、pop方法：
+  3.1、元素出栈，整个对象出栈
+4、top方法：
+  4.1、返回栈顶对象的element属性
+5、getMin方法：
+  5.1、返回栈顶对象的min属性
+```
 
 ### 2.1、JavaScript Solution
 
+**方法一：基于数组的最小栈**
+
 ```javascript
 /**
- * 解题思路：统计每个字母的出现频率
- * 1、检查输入字符串数组是否为空，为空的话，直接return空数组
- * 2、创建一个hashMap,用来分类保存anagrams,其中键为“每个单词产生的词频统计数组”，值为“具有相同词频统计数组的单词构成的数组”
- * 3、遍历输入的字符串数组：
- *      3.1、对于每一个字符串单词，需要初始化一个长度为26的全0数组，用于统计26个字母出现的次数
- *      3.2、遍历每个单词中的每个字母：
- *          3.2.1、获取每个字母的ASCII码（a是97，所以要减去97，这样26个字母就可以对于词频统计数组的0~25的索引）
- *          3.2.2、每出现一次，对应词频加1
- *      3.3、遍历完当前单词后，把对应生成的词频数组利用join()转成字符串，这样才能作为hashMap的键
- *      3.4、把当前单词分类保存到hashMap中
- *          3.4.1、如果map中有当前key的话，就把当前单词加入到其值中，同时还有拼接上之前已经放进来的单词，构成一个数组
- *          3.4.2、如果没有的话，就只把当前这个单词放进去就行，不用拼接了
- * 4、创建空数组，把map的所有值遍历提取出来，保存在这个数组中，返回这个结果数组
+ * initialize your data structure here.
  */
-/**
- * @param {string[]} strs
- * @return {string[][]}
- */
-var groupAnagrams = function (strs) {
-  // 1、检查输入字符串数组是否为空，为空的话，直接return空数组
-  if (strs.length === 0) {
-    return [];
-  }
-
-  // 2、创建一个hashMap,用来分类保存anagrams,其中键为“每个单词产生的词频统计数组”，值为“具有相同词频统计数组的单词构成的数组”
-  const map = new Map();
-
-  // 3、遍历输入的字符串数组：
-  for (let word of strs) {
-    // 3.1、对于每一个字符串单词，需要初始化一个长度为26的全0数组，用于统计26个字母出现的次数
-    let lettersFrequencyArray = Array(26).fill(0);
-    // 3.2、遍历每个单词中的每个字母：
-    for (let i = 0; i < word.length; i++) {
-      // 3.2.1、获取每个字母的ASCII码（a是97，所以要减去97，这样26个字母就可以对于词频统计数组的0~25的索引）
-      let ascii = word.charCodeAt(i) - 97;
-      // 3.2.2、每出现一次，对应词频加1
-      lettersFrequencyArray[ascii]++;
-    }
-    // 3.3、遍历完当前单词后，把对应生成的词频数组利用join()转成字符串，这样才能作为hashMap的键
-    let key = lettersFrequencyArray.join("");
-    // 3.4、把当前单词分类保存到hashMap中
-    if (map.has(key)) {
-      //  3.4.1、如果map中有当前key的话，就把当前单词加入到其值中，同时还有拼接上之前已经放进来的单词，构成一个数组
-      map.set(key, [...map.get(key), word]);
-    } else {
-      // 3.4.2、如果没有的话，就只把当前这个单词放进去就行，不用拼接了
-      map.set(key, [word]);
-    }
-  }
-
-  // 4、创建空数组，把map的所有值遍历提取出来，保存在这个数组中，返回这个结果数组
-  let result = [];
-  for (let keyValue of map) {
-    // 只把每项的值取出来 0代表键 1代表值
-    result.push(keyValue[1]);
-  }
-
-  return result;
+var MinStack = function () {
+  // 1、在构造函数中，初始化成员变量，两个数组，分别用于构造最小栈和辅助栈
+  this.minStackItems = [];
+  this.assistStackItems = [];
 };
+
+/**
+ * @param {number} x
+ * @return {void}
+ */
+MinStack.prototype.push = function (x) {
+  // 2.1、元素入栈
+  this.minStackItems.push(x);
+  // 2.2、如果辅助栈为空或者当前元素小于等于辅助栈的栈顶元素，就把当前元素也加入到辅助栈
+  if (
+    this.assistStackItems.length === 0 ||
+    x <= this.assistStackItems[this.assistStackItems.length - 1]
+  ) {
+    this.assistStackItems.push(x);
+  }
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function () {
+  // 3.1、元素出栈，并保存供后续判断使用
+  let tempOut = this.minStackItems.pop();
+  // 3.2、如果辅助栈的栈顶元素等于出栈的元素，说明删除了最小元素，此时也要删除辅助栈顶元素
+  if (this.assistStackItems[this.assistStackItems.length - 1] === tempOut) {
+    this.assistStackItems.pop();
+  }
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function () {
+  // 4.1、返回最小栈栈顶元素
+  return this.minStackItems[this.minStackItems.length - 1];
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function () {
+  // 5.1、返回辅助栈栈顶元素
+  return this.assistStackItems[this.assistStackItems.length - 1];
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
 ```
 
+**方法二：基于对象数组的最小栈【不用创建辅助栈了】**
+
+```javascript
+/**
+ * initialize your data structure here.
+ */
+var MinStack = function () {
+  // 1、在构造函数中，初始化成员变量，一个对象数组，用于构造最小栈,对象中保存当前元素和当前最小值
+  this.minStackItems = [];
+};
+
+/**
+ * @param {number} x
+ * @return {void}
+ */
+MinStack.prototype.push = function (x) {
+  // 2.1、元素入栈，如果栈为空，直接把对象入栈，不为空则需要比较对象中的min属性后，再加入对象
+  if (this.minStackItems.length === 0) {
+    this.minStackItems.push({ element: x, min: x });
+  } else {
+    this.minStackItems.push({
+      element: x,
+      min: Math.min(x, this.minStackItems[this.minStackItems.length - 1].min),
+    });
+  }
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function () {
+  // 3.1、元素出栈
+  this.minStackItems.pop();
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function () {
+  // 4.1、返回栈顶元素
+  return this.minStackItems[this.minStackItems.length - 1].element;
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function () {
+  // 5.1、返回栈顶对象的min属性
+  return this.minStackItems[this.minStackItems.length - 1].min;
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
+```
 
 ### 2.2、TypeScript Solution
 
+**方法一：基于数组的最小栈**
+
 ```javascript
-function groupAnagrams(strs: string[]): string[][] {
-  if (strs.length === 0) {
-    return [];
+class MinStack {
+  minStackItems: Array<number>;
+  assistStackItems: Array<number>;
+  constructor() {
+    this.minStackItems = [];
+    this.assistStackItems = [];
   }
 
-  const map = new Map();
-
-  for (let word of strs) {
-    let lettersFrequencyArray: number[] = Array(26).fill(0);
-
-    for (let i: number = 0; i < word.length; i++) {
-      let ascii: number = word.charCodeAt(i) - 97;
-
-      lettersFrequencyArray[ascii]++;
-    }
-
-    let key: string = lettersFrequencyArray.join("");
-
-    if (map.has(key)) {
-      map.set(key, [...map.get(key), word]);
-    } else {
-      map.set(key, [word]);
+  push(x: number): void {
+    this.minStackItems.push(x);
+    if (
+      this.assistStackItems.length === 0 ||
+      x <= this.assistStackItems[this.assistStackItems.length - 1]
+    ) {
+      this.assistStackItems.push(x);
     }
   }
 
-  let result: string[][] = [];
-
-  for (let keyValue of map) {
-    result.push(keyValue[1]);
+  pop(): void {
+    let tempOut: any = this.minStackItems.pop();
+    if (this.assistStackItems[this.assistStackItems.length - 1] === tempOut) {
+      this.assistStackItems.pop();
+    }
   }
 
-  return result;
+  top(): number {
+    return this.minStackItems[this.minStackItems.length - 1];
+  }
+
+  getMin(): number {
+    return this.assistStackItems[this.assistStackItems.length - 1];
+  }
 }
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
 ```
+
+**方法二：基于对象数组的最小栈【不用创建辅助栈了】**
+
+```javascript
+interface MinStackElementObj {
+  element: number;
+  min: number;
+}
+
+class MinStack {
+  minStackItems: Array<MinStackElementObj>;
+  constructor() {
+    this.minStackItems = [];
+  }
+
+  push(x: number): void {
+    let elementObj: MinStackElementObj = {
+      element: x,
+      min:
+        this.minStackItems.length === 0
+          ? x
+          : Math.min(x, this.minStackItems[this.minStackItems.length - 1].min),
+    };
+
+    this.minStackItems.push(elementObj);
+  }
+
+  pop(): void {
+    this.minStackItems.pop();
+  }
+
+  top(): number {
+    return this.minStackItems[this.minStackItems.length - 1].element;
+  }
+
+  getMin(): number {
+    return this.minStackItems[this.minStackItems.length - 1].min;
+  }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
+
+```
+
+
 
 ------
 
