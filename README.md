@@ -8,12 +8,12 @@
 
 ## 文件结构：
 
-​	以15. 3Sum为例：
+​	以150.Evaluate Reverse Polish Notation为例：
 
 ```javascript
 .
-└── 49.Group Anagrams                    #LeetCode第49题 
-        ├── 每日一题 -- LeetCode (七).md   #存放此题博客文档
+└── 150.Evaluate Reverse Polish Notation                    #LeetCode第150题 
+        ├── JavaScript / TypeScript for LeetCode (六十).md   #存放此题博客文档
         ├── 49.Group Anagrams.js  	 #存放此题JavaScript Solution
         └── 49.Group Anagrams.ts 	  #存放此题TypeScript Solution
 ```
