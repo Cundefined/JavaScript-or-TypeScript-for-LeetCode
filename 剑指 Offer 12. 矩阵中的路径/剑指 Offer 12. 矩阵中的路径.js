@@ -1,0 +1,80 @@
+/*
+解题思路：深度优先搜索
+类似【200、岛屿数量】
+1、创建记录【是否访问】标志的数组
+2、遍历二维数组，每个字符都上下左右去递归遍历周围字符
+3、创建dfs函数：
+  3.1、递归结束条件
+  3.2、边界条件：
+    3.2.1、当前点要存在，不越界
+    3.2.2、当前的点已经访问过，或当前点就不是目标点
+  3.3、排除掉边界false情况，当前点是没问题的，可以继续递归考察
+  3.4、递归调用dfs函数，去寻找下一个目标字符，依次访问沉没当前元素的上下左右元素（往上沉没完之后，返回当前位置，往下沉没完之后，返回当前位置，接着把左右都沉没完）
+  3.5、如果基于当前点，可以为剩下的字符找到路径，返回true
+  3.6、如果当前dfs找不出，撤销当前点的访问状态。返回false，继续以别的字符作为起点开始探索
+*/
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function (board, word) {
+  let rows = board.length;
+  let cols = board[0].length;
+
+  // 1、创建记录【是否访问】标志的数组
+  const isVisited = new Array(rows);
+  for (let i = 0; i < isVisited.length; i++) {
+    isVisited[i] = new Array(cols);
+  }
+
+  // 2、遍历二维数组，每个字符都上下左右去递归遍历周围字符
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      let res = dfs(board, word, row, col, 0);
+      if (res) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+
+  // 3、创建dfs函数：
+  function dfs(board, word, row, col, start) {
+    //   3.1、递归结束条件
+    if (start > word.length - 1) {
+      return true;
+    }
+    //   3.2、边界条件：
+    // 3.2.1、当前点要存在，不越界
+    if (row < 0 || row > rows - 1 || col < 0 || col > cols - 1) {
+      return false;
+    }
+
+    // 3.2.2、当前的点已经访问过，或当前点就不是目标点
+    if (isVisited[row][col] === true || board[row][col] !== word[start]) {
+      return false;
+    }
+
+    //   3.3、排除掉边界false情况，当前点是没问题的，可以继续递归考察
+    // 记录一下当前点已经被访问
+    isVisited[row][col] = true;
+
+    //   3.4、递归调用dfs函数，去寻找下一个目标字符，依次访问沉没当前元素的上下左右元素（往上沉没完之后，返回当前位置，往下沉没完之后，返回当前位置，接着把左右都沉没完）
+    let res =
+      dfs(board, word, row - 1, col, start + 1) ||
+      dfs(board, word, row + 1, col, start + 1) ||
+      dfs(board, word, row, col - 1, start + 1) ||
+      dfs(board, word, row, col + 1, start + 1);
+
+    // 3.5、如果基于当前点，可以为剩下的字符找到路径，返回true
+    if (res) {
+      return true;
+    }
+
+    // 3.6、如果当前dfs找不出，撤销当前点的访问状态。返回false，继续以别的字符作为起点开始探索
+    isVisited[row][col] = false;
+    return false;
+  }
+};
