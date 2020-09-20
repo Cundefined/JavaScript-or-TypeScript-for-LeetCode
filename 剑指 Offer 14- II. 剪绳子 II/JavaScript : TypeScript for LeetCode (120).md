@@ -1,0 +1,88 @@
+﻿# 是差点运气，可我一直在努力！
+**当前进程：**
+
+ - 开始时间：2020.6.27 
+ - 结束时间：undefined
+
+***GitHub仓库：https://github.com/Cundefined/JavaScript-or-TypeScript-for-LeetCode***
+
+
+
+## 1、题目要求
+[**( 剑指 Offer 14- II )  剪绳子 II**](https://leetcode-cn.com/problems/jian-sheng-zi-ii-lcof/)
+      
+
+
+
+## 2、解题思路
+**方法：数学推导法**
+```javascript
+注意，与“剪绳子I”不同的是2 <= n <= 1000
+即在大数n情况下，为防止溢出int范围，需要进行求余
+1、经推导，每段绳子的长度是e的时候乘积最大，即尽量多切分成长度为3的小段
+2、即n大于4时，只需要不断减去3，即可优先切出很多长度为3的小段
+```
+
+
+### 2.1、JavaScript Solution
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var cuttingRope = function (n) {
+  // n至少为2，2，3，4不符合上述规律，需单独考虑
+  if (n === 2) {
+    return 1;
+  }
+  if (n === 3) {
+    return 2;
+  }
+  if (n === 4) {
+    return 4;
+  }
+
+  let res = 1;
+  while (n > 4) {
+    // n大于4时，只需要不断减去3，即可优先切出很多长度为3的小段
+    n = n - 3;
+
+    // 每切出一个长度为3的小段，就计入乘积结果中，防止溢出，需要大数取模
+    res = (res * 3) % 1000000007;
+  }
+
+  //切分出很多长度为3的小段后，剩下长度小于4了，不好切分了，直接计入乘积结果中
+  return (res * n) % 1000000007;
+};
+```
+
+### 2.2、TypeScript Solution
+
+```javascript
+function cuttingRope(n: number): number {
+  // n至少为2，2，3，4不符合上述规律，需单独考虑
+  if (n === 2) {
+    return 1;
+  }
+  if (n === 3) {
+    return 2;
+  }
+  if (n === 4) {
+    return 4;
+  }
+
+  let res: number = 1;
+  while (n > 4) {
+    // n大于4时，只需要不断减去3，即可优先切出很多长度为3的小段
+    n = n - 3;
+
+    // 每切出一个长度为3的小段，就计入乘积结果中，防止溢出，需要大数取模
+    res = (res * 3) % 1000000007;
+  }
+
+  //切分出很多长度为3的小段后，剩下长度小于4了，不好切分了，直接计入乘积结果中
+  return (res * n) % 1000000007;
+}
+```
+
